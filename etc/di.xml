@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+
+<!--
+ * AmiciInfotech
+ * Copyright (C) 2023 AmiciInfotech <contact@amiciinfotech.com>
+ *
+ * NOTICE OF LICENSE
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    AmiciInfotech
+ * @package     Amici_BannerSlider
+ * @copyright   Copyright (c) 2023 AmiciInfotech (https://amiciinfotech.com/)
+ * @license     https://amiciinfotech.com/license-agreement.html
+ * @author      AmiciInfotech <contact@amiciinfotech.com>
+ */
+ */-->
+ 
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Amici\BannerSlider\Api\Data\BannerInterface" type="Amici\BannerSlider\Model\Banner" />
+    <preference for="Amici\BannerSlider\Api\Data\SliderInterface" type="Amici\BannerSlider\Model\Slider" />
+    <preference for="Amici\BannerSlider\Api\Data\BannerSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+    <preference for="Amici\BannerSlider\Api\Data\SliderSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+    <preference for="Amici\BannerSlider\Api\BannerRepositoryInterface" type="Amici\BannerSlider\Model\BannerRepository" />
+    <preference for="Amici\BannerSlider\Api\SliderRepositoryInterface" type="Amici\BannerSlider\Model\SliderRepository" />
+    <preference for="Amici\BannerSlider\Api\SliderLinkRepositoryInterface" type="Amici\BannerSlider\Model\SliderLinkRepository" />
+    <preference for="Amici\BannerSlider\Api\Data\SliderBannerLinkInterface" type="Amici\BannerSlider\Model\SliderBannerLink" />
+    <preference for="Amici\BannerSlider\Api\SliderLinkManagementInterface" type="Amici\BannerSlider\Model\SliderLinkManagement" />
+    <preference for="Amici\BannerSlider\Api\GetUtilitySliderIdentifiersInterface" type="Amici\BannerSlider\Model\GetUtilitySliderIdentifiers" />
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="amici_slider_listing_data_source" xsi:type="string">Amici\BannerSlider\Model\ResourceModel\Slider\Grid\Collection</item>-->
+                <item name="amici_banner_listing_data_source" xsi:type="string">Amici\BannerSlider\Model\ResourceModel\Banner\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Amici\BannerSlider\Model\ResourceModel\Slider\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">amici_bannerslider_slider</argument>
+            <argument name="eventPrefix" xsi:type="string">amici_slider_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">slider_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Amici\BannerSlider\Model\ResourceModel\Slider</argument>
+        </arguments>
+    </type>
+    <type name="Amici\BannerSlider\Model\ResourceModel\Banner\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">amici_bannerslider_banner</argument>
+            <argument name="eventPrefix" xsi:type="string">amici_banner_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">banner_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Amici\BannerSlider\Model\ResourceModel\Banner</argument>
+        </arguments>
+    </type>
+    <virtualType name="CmsGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Amici\BannerSlider\Model\Wysiwyg\Config">
+        <arguments>
+            <argument name="windowSize" xsi:type="array">
+                <item name="height" xsi:type="number">600</item>
+                <item name="width" xsi:type="number">1000</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Amici\BannerSlider\Model\Wysiwyg\Images\Storage">
+        <arguments>
+            <argument name="resizeParameters" xsi:type="array">
+                <item name="height" xsi:type="number">75</item>
+                <item name="width" xsi:type="number">100</item>
+            </argument>
+            <argument name="extensions" xsi:type="array">
+                <item name="allowed" xsi:type="array">
+                    <item name="jpg" xsi:type="string">image/jpg</item>
+                    <item name="jpeg" xsi:type="string">image/jpeg</item>
+                    <item name="png" xsi:type="string">image/png</item>
+                    <item name="gif" xsi:type="string">image/gif</item>
+                </item>
+                <item name="image_allowed" xsi:type="array">
+                    <item name="jpg" xsi:type="string">image/jpg</item>
+                    <item name="jpeg" xsi:type="string">image/jpeg</item>
+                    <item name="png" xsi:type="string">image/png</item>
+                    <item name="gif" xsi:type="string">image/gif</item>
+                </item>
+                <item name="media_allowed" xsi:type="array">
+                    <item name="flv" xsi:type="string">video/x-flv</item>
+                    <item name="swf" xsi:type="string">application/x-shockwave-flash</item>
+                    <item name="avi" xsi:type="string">video/x-msvideo</item>
+                    <item name="mov" xsi:type="string">video/x-sgi-movie</item>
+                    <item name="rm" xsi:type="string">application/vnd.rn-realmedia</item>
+                    <item name="wmv" xsi:type="string">video/x-ms-wmv</item>
+                </item>
+            </argument>
+            <argument name="dirs" xsi:type="array">
+                <item name="exclude" xsi:type="string"/>
+                <item name="include" xsi:type="string"/>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\Entity\RepositoryFactory">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="Amici\BannerSlider\Api\Data\SliderInterface" xsi:type="string">Amici\BannerSlider\Api\SliderRepositoryInterface</item>
+                <item name="Amici\BannerSlider\Api\Data\BannerInterface" xsi:type="string">Amici\BannerSlider\Api\BannerRepositoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Amici\BannerSlider\Api\Data\SliderInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">amici_bannerslider_slider</item>
+                    <item name="identifierField" xsi:type="string">slider_id</item>
+                </item>
+                <item name="Amici\BannerSlider\Api\Data\BannerInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">amici_bannerslider_banner</item>
+                    <item name="identifierField" xsi:type="string">banner_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Amici\BannerSlider\BannerImageUpload" type="Amici\BannerSlider\Model\ImageUploader">
+        <arguments>
+                <argument name="baseTmpPath" xsi:type="string">bannerslider/tmp</argument>
+                <argument name="basePath" xsi:type="string">bannerslider</argument>
+                <argument name="allowedExtensions" xsi:type="array">
+                    <item name="jpg" xsi:type="string">jpg</item>
+                    <item name="jpeg" xsi:type="string">jpeg</item>
+                    <item name="gif" xsi:type="string">gif</item>
+                    <item name="png" xsi:type="string">png</item>
+                    <item name="svg" xsi:type="string">svg</item>
+                </argument>
+        </arguments>
+    </virtualType>
+    <type name="Amici\BannerSlider\Controller\Adminhtml\Banner\Upload">
+        <arguments>
+                <argument name="imageUploader" xsi:type="object">Amici\BannerSlider\BannerImageUpload</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Amici\BannerSlider\Api\Data\SliderInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Amici\BannerSlider\Api\Data\BannerInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="Amici\BannerSlider\Api\Data\SliderInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader" xsi:type="string">Amici\BannerSlider\Model\ResourceModel\Slider\Relation\Store\ReadHandler</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator" xsi:type="string">Amici\BannerSlider\Model\ResourceModel\Slider\Relation\Store\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater" xsi:type="string">Amici\BannerSlider\Model\ResourceModel\Slider\Relation\Store\SaveHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Amici\BannerSlider\Model\SliderRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Amici\BannerSlider\Model\Api\SearchCriteria\SliderCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Amici\BannerSlider\Model\BannerRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Amici\BannerSlider\Model\Api\SearchCriteria\BannerCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <virtualType name="Amici\BannerSlider\Model\Api\SearchCriteria\CollectionProcessor\SliderFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="store_id" xsi:type="object">Amici\BannerSlider\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\SliderStoreFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Amici\BannerSlider\Model\Api\SearchCriteria\SliderCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Amici\BannerSlider\Model\Api\SearchCriteria\CollectionProcessor\SliderFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Amici\BannerSlider\Ui\Component\DataProvider">
+        <arguments>
+            <argument name="additionalFilterPool" xsi:type="array">
+                <item name="fulltext" xsi:type="object">Amici\BannerSlider\Ui\Component\Banner\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

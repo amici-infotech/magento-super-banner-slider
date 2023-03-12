@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="amici_bannerslider_banner" resource="default" engine="innodb" comment="Banner Slider Banner Table">
+        <column xsi:type="smallint" name="banner_id" padding="6" unsigned="false" nullable="false" identity="true" comment="Banner ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Banner Name"/>
+        <column xsi:type="varchar" name="slider_id" nullable="true" length="255" default="" comment="Slider Ids"/>
+        <column xsi:type="varchar" name="link" nullable="true" length="255" default="" comment="Banner Link"/>
+        <column xsi:type="int" name="target" padding="11" unsigned="false" nullable="true" identity="false" default="0" comment="Banner Target"/>
+        <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Banner Image"/>
+        <column xsi:type="varchar" name="image_alt" nullable="true" length="255" comment="Banner Alt Text"/>
+        <column xsi:type="timestamp" name="creation_time" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Banner Creation Time"/>
+        <column xsi:type="timestamp" name="update_time" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Banner Modification Time"/>
+        <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="false" identity="false" default="1" comment="Status"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="banner_id"/>
+        </constraint>
+        <index referenceId="AMICI_BANNERSLIDER_BANNER_NAME" indexType="fulltext">
+            <column name="name"/>
+        </index>
+    </table>
+    <table name="amici_bannerslider_slider" resource="default" engine="innodb" comment="AmiciInfotech BannerSlider Slider Table">
+        <column xsi:type="smallint" name="slider_id" padding="6" unsigned="false" nullable="false" identity="true" comment="Slider ID"/>
+        <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Slider Title"/>
+        <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="false" identity="false" default="1" comment="Status"/>
+        <column xsi:type="int" name="default_items" padding="11" unsigned="false" nullable="true" identity="false" comment="Default Items Count to Show"/>
+        <column xsi:type="datetime" name="start_date" on_update="false" nullable="true" comment="Slider Start Date"/>
+        <column xsi:type="datetime" name="end_date" on_update="false" nullable="true" comment="Slider End Date"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="slider_id"/>
+        </constraint>
+        <index referenceId="AMICI_BANNERSLIDER_SLIDER_TITLE" indexType="fulltext">
+            <column name="title"/>
+        </index>
+    </table>
+    <table name="amici_bannerslider_slider_store" resource="default" engine="innodb" comment="Banner Slider Slider To Store Linkage Table">
+        <column xsi:type="smallint" name="slider_id" padding="6" unsigned="false" nullable="false" identity="false" comment="Slider ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="slider_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_CCFE50AC0BB07FBBD69CD5DFAD05A04E" table="amici_bannerslider_slider_store" column="slider_id" referenceTable="amici_bannerslider_slider" referenceColumn="slider_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="AMICI_BANNERSLIDER_SLIDER_STORE_STORE_ID_STORE_STORE_ID" table="amici_bannerslider_slider_store" column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="AMICI_BANNERSLIDER_SLIDER_STORE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="amici_slider_banner" resource="default" engine="innodb" comment="Banners To Slider Linkage Table">
+        <column xsi:type="int" name="entity_id" padding="11" unsigned="false" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="slider_id" padding="10" unsigned="true" nullable="false" identity="false" default="0" comment="Slider ID"/>
+        <column xsi:type="smallint" name="banner_id" padding="6" unsigned="false" nullable="false" identity="false" comment="Banner ID"/>
+        <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false" default="0" comment="Position"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+            <column name="slider_id"/>
+            <column name="banner_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_A48B7D62D716AB38C546913A6E90FB2B" table="amici_slider_banner" column="banner_id" referenceTable="amici_bannerslider_banner" referenceColumn="banner_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="AMICI_SLIDER_BANNER_SLIDER_ID_BANNER_ID">
+            <column name="slider_id"/>
+            <column name="banner_id"/>
+        </constraint>
+        <index referenceId="AMICI_SLIDER_BANNER_BANNER_ID" indexType="btree">
+            <column name="banner_id"/>
+        </index>
+    </table>
+</schema>

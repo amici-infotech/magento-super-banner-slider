@@ -1,0 +1,25 @@
+<?php declare(strict_types=1);
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
+
+// The item to render is set on the block before the template is rendered:
+
+/** @var \Magento\Catalog\Model\Product $item */
+$item = $block->getData('item');
+$bannerHelper = $this->helper(\Amici\BannerSlider\Helper\Data::class);
+$textPosition = 'text-center';
+if ($item->getTextPosition()) {
+    $textPosition = $item->getTextPosition();
+}
+?>
+<a href="<?= $escaper->escapeHtmlAttr($item->getLink())?>" class="relative flex w-full items-center bg-white banner-items" tabindex="-1">
+    <span class="w-full">
+        <img class="self-center w-full h-auto"
+            src="<?= $escaper->escapeHtmlAttr($bannerHelper->getBannerImageUrl($item->getImage(),1700,450)) ?>"
+            alt="<?= $escaper->escapeHtmlAttr($item->getImageAlt()) ?>"
+            fetchpriority="high"
+        />
+    </span>
+</a>

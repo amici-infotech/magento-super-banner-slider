@@ -1,0 +1,164 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\Store;
+use Hyva\Theme\ViewModel\ThemeLibrariesConfig;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+// phpcs:disable Generic.Files.LineLength.TooLong
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Store $viewModelStore */
+$viewModelStore = $viewModels->require(Store::class);
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$items = $block->getItems() ?? [];
+if (is_object($items) && $items instanceof Iterator) {
+    $items = iterator_to_array($items);
+}
+if (!$itemCount = count($items)) {
+    return '';
+}
+$sliderItemRenderer = $block->getChildBlock('slider.item.template');
+$amiciHelper = $this->helper(\Amici\BannerSlider\Helper\Data::class);
+$version = $viewModels->require(ThemeLibrariesConfig::class)->getVersionIdFor('alpine');
+?>
+<script type="text/javascript" defer>
+    'use strict';
+    function initBannerSliderComponent() {
+        return {
+            active: 0,
+            itemCount: 0,
+            getSlider() {
+                //return this.$root.querySelector('.js_slides');
+                    <?php if ($version >= 3 ): ?>
+                        // coded for latest version
+                        return this.$root.querySelector('.js_slides');
+                    <?php else: ?>
+                        // check backward compatiblity
+                        return this.$el.querySelector('.js_slides');
+                    <?php endif; ?>
+            },
+            pageSize: 4,
+            pageFillers: 0,
+            calcPageSize() {
+                const slider = this.getSlider();
+                if (slider) {
+                    this.itemCount = slider.querySelectorAll('.js_slide').length;
+                    this.pageSize = Math.round(slider.clientWidth / slider.querySelector('.js_slide').clientWidth);
+                    this.pageFillers = (
+                        this.pageSize * Math.ceil(this.itemCount / this.pageSize)
+                    ) - this.itemCount;
+                }
+            },
+            calcActive() {
+                const slider = this.getSlider();
+                if (slider) {
+                    const sliderItems = this.itemCount + this.pageFillers;
+                    const calculatedActiveSlide = slider.scrollLeft / (slider.scrollWidth / sliderItems);
+                    this.active = Math.round(calculatedActiveSlide / this.pageSize) * this.pageSize;
+                }
+            },
+            scrollPrevious() {
+                this.scrollTo(this.active - this.pageSize);
+            },
+            scrollNext() {
+                this.scrollTo(this.active + this.pageSize);
+            },
+            scrollTo(idx) {
+                const slider = this.getSlider();
+                if (slider) {
+                    const slideWidth = slider.scrollWidth / (this.itemCount + this.pageFillers);
+                    slider.scrollLeft = Math.floor(slideWidth) * idx;
+                    this.active = idx;
+                }
+            }
+        }
+    }
+</script>
+<section class="<?=
+    $escaper->escapeHtmlAttr($block->getData('maybe_purged_tailwind_section_classes'))
+    ?: 'text-gray-700 inline-block align-top w-full body-font banner-slider';
+?>"
+         x-data="initBannerSliderComponent()"
+         x-init="calcPageSize();"
+         @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
+>
+    <?php if ($items): ?>
+        <div class="bg-teal-100 relative flex flex-col justify-center items-center">
+            <div class="relative w-full overflow-x-hidden focus-within:ring-0 active:ring-0">
+                <div class="relative flex flex-nowrap w-full overflow-auto transition-all js_slides snap"
+                     @scroll.debounce="calcActive"
+                >
+                    <?php foreach ($items as $item): ?>
+                        <div class="flex flex-shrink-0 w-full js_slide w-full">
+                            <div class="w-full">
+                                 <?= $sliderItemRenderer->setItem($item)->toHtml() ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    <div :class="{
+                        'js_dummy_slide w-full flex-none py-1' : pageFillers > 0
+                        }"></div>
+                    <div :class="{
+                        'js_dummy_slide w-full flex-none py-1' : pageFillers > 1
+                        }"></div>
+                    <div :class="{
+                        'js_dummy_slide w-full flex-none py-1' : pageFillers > 2
+                        }"></div>
+                </div>
+            </div>
+            <?php if($amiciHelper->isNav()): ?>
+                <template x-if="itemCount > pageSize">
+                    <div class="flex items-center justify-end">
+                        <button
+                            aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
+                            tabindex="-1"
+                            class="mr-4 text-black -mt-5 rounded-full bg-white absolute p-2 top-1/2 left-5 outline-none focus:outline-none flex-none"
+                            :class="{ 'opacity-25 pointer-events-none' : active === 0 }"
+                            @click="scrollPrevious">
+                            <?= $heroicons->chevronLeftHtml("w-5 h-5", 25, 25) ?>
+                        </button>
+
+                        <button
+                            aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
+                            tabindex="-1"
+                            class="ml-4 text-black -mt-5 rounded-full bg-white absolute p-2 top-1/2 right-5 outline-none focus:outline-none flex-none"
+                            :class="{ 'opacity-25 pointer-events-none' : active >= itemCount-pageSize }"
+                            @click="scrollNext">
+                            <?= $heroicons->chevronRightHtml("w-5 h-5", 25, 25) ?>
+                        </button>
+                    </div>
+                </template>
+            <?php endif; ?>
+            <?php if($amiciHelper->getShowDotsByDefault()):  ?>
+                <div class="flex flex-wrap w-full absolute bottom-3 md:w-auto justify-center">
+                <?php for ($i=0; $i < $itemCount; $i++): ?>
+                    <span class="flex-shrink-0 block w-4 h-4 m-1 border bg-black rounded-full shadow cursor-pointer"
+                            :class="{
+                                'bg-white': active === <?= (int) $i ?>,
+                                'hidden': (pageSize !== 1 && !!(<?= (int) $i ?> % pageSize))
+                                }"
+                            @click="scrollTo(<?= (int) $i ?>)">
+                    </span>
+                <?php endfor; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+</section>

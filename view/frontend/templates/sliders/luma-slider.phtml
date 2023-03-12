@@ -1,0 +1,198 @@
+<?php
+
+/* AmiciInfotech
+ * Copyright (C) 2023 AmiciInfotech <contact@amiciinfotech.com>
+ *
+ * NOTICE OF LICENSE
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category AmiciInfotech
+ * @package AmiciInfotech_Quantity
+ * @copyright Copyright (c) 2023 AmiciInfotech (https://amiciinfotech.com/)
+ * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+ * @author AmiciInfotech <contact@amiciinfotech.com>
+ */
+// @codingStandardsIgnoreFile
+
+/* @block \Amici\BannerSlider\Block\BannerSlider * */
+
+$bannerHelper = $this->helper(\Amici\BannerSlider\Helper\Data::class);
+$mediaUrl = $bannerHelper->getMediaUrl();
+$slider = $this->getSlider();
+$sliderId = $slider->getSliderId();
+$defaultItems = $slider->getDefaultItems();
+$storeId = $bannerHelper->getCurrentStoreId();
+$setSliderToStores = $slider->getStoreId();
+$banners = [];
+
+if (in_array($storeId, $setSliderToStores) || in_array('0', $setSliderToStores)) {
+    $banners = $bannerHelper->getBannersCollectionBySliderId($sliderId);
+}
+$isTimeToShowSlider = $bannerHelper->getSliderTimingBySliderId($slider->getSliderId());
+
+if (sizeof($banners) > 0 && $slider->getStatus() && $isTimeToShowSlider) {
+    ?>
+    <div id="page-gravure">
+        <div class="mdslider-container without-background
+            <?php
+            if ($defaultItems == 1) { ?>
+                <?= ' single-slide';
+            }
+            if ($defaultItems > 1) { ?>
+                <?= " multiple-slide";
+            } ?>" >
+            <?php
+            foreach ($banners as $banner) {
+                $target = $bannerHelper->getBannersTarget($banner->getTarget());
+                ?>
+                <div class="banner-details <?= $banner->getCustomClass() ?>
+                banner-<?= $banner->getBannerId(); ?> slidesToShow-1">
+                    <a href="<?= $banner->getLink(); ?>"
+                        <?php if ($target) { ?>
+                        target="<?= $target; ?>"
+                        <?php } ?> class="banner-link">
+                        <div class="banner-container container
+                        <?php if (empty($block->filterOutputHtml($banner->getCaption()))) { ?>
+                            <?= "full-image"; } ?>" >
+                            <?php if (!empty($block->filterOutputHtml($banner->getCaption()))) { ?>
+                                <div class="md-caption-box <?= $banner->getTextPosition() ?>">
+                                    <div data-animate="<?= $banner->getCaptionAnimation() ?>">
+                                        <div class="<?= $banner->getCaptionAnimation() ?> banner-description">
+                                            <!-- <h3><?= $banner->getName(); ?></h3> -->
+                                            <?= $block->filterOutputHtml($banner->getCaption()) ?>
+                                        </div>
+                                        <!-- <span class="read-more-link btn btn-primary">
+                                            <?php //$block->escapeHtml(__('Shop Now'));?></span> -->
+                                    </div>
+                                </div>
+                                <?php if (!empty($banner->getImage())) { ?>
+                                    <div class="banner-image">
+                                        <div class="banner-imagecontainer">
+                                            <img src="
+                                            <?= $bannerHelper->getBannerImageUrl($banner->getImage(), 1750, 465); ?>"
+                                                 alt="" />
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <?php if (!empty($banner->getImage())) { ?>
+                                    <img src="
+                                    <?= $bannerHelper->getBannerImageUrl($banner->getImage(), 1750, 465); ?>" alt="" />
+                                <?php } ?>
+                            <?php } ?>
+                        </div>
+                    </a>
+
+                </div>
+
+            <?php } ?>
+        </div>
+        <?php if ($bannerHelper->isNav($storeId) == 1) { ?>
+            <div id ="navbar" class="mdslider-container-nav-wrapper without-background <?php if ($defaultItems > 1) { ?>
+                    <?= " no-display";
+                } ?>">
+                <div class="page-main">
+                    <div  class="mdslider-container-nav">
+                        <?php
+                        $navcount = 1;
+                        foreach ($banners as $banner) {
+                            $target = $bannerHelper->getBannersTarget($banner->getTarget());
+                            ?>
+                            <div>
+                                <h3><span><?= $navcount; ?></span><?= $banner->getName(); ?></h3>
+                            </div>
+                            <?php
+                            $navcount ++;
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+<?php } ?>
+<script>
+    require([
+        'jquery',
+        'amici_slickslider'
+    ], function ($) {
+        $(document).ready(function () {
+            var checkLang = $("html").attr("lang");
+            var trueRtl;
+            if(checkLang === "ar"){
+                $(".mdslider-container").attr("dir","rtl");
+            }
+            $(".mdslider-container").on('init', function (event, slick) {
+                animationClass = $('.slick-active').find('.banner-caption').attr('data-animate');
+                $(this).find('.animated').addClass('activate ' + animationClass);
+            });
+
+            $(".mdslider-container").slick({
+                <?php if ($bannerHelper->isNav($storeId) == 1) { ?>
+                dots: <?= $bannerHelper->getShowDotsByDefault($storeId) ? 'true' : 'false'; ?>,
+                infinite: <?= ($defaultItems > 1) ? 'true' : 'false';  ?>,
+                autoplay: <?= $bannerHelper->isAutoplay($storeId) ? 'true' : 'false'; ?>,
+                speed: <?= $slider->getSliderSpeed() ? $slider->getSliderSpeed() : 300; ?>,
+                slidesToShow: <?= $defaultItems ? $defaultItems : 1; ?>,
+                centerMode: <?= ($defaultItems > 1) ? 'true' : 'false';  ?>,
+                slidesToScroll: <?= $bannerHelper->getSlidesToScrollByDefault($storeId) ?
+                    $bannerHelper->getSlidesToScrollByDefault($storeId) : 1; ?>,
+                asNavFor: '#navbar .mdslider-container-nav',
+                <?php } else { ?>
+                dots: <?= $bannerHelper->getShowDotsByDefault($storeId) ? 'true' : 'false'; ?>,
+                infinite: <?= ($defaultItems > 1) ? 'true' : 'false';  ?>,
+                autoplay: <?= $bannerHelper->isAutoplay($storeId) ? 'true' : 'false'; ?>,
+                speed: <?= $slider->getSliderSpeed() ? $slider->getSliderSpeed() : 300; ?>,
+                slidesToShow: <?= $defaultItems ? $defaultItems : 1; ?>,
+                centerMode: <?= ($defaultItems > 1) ? 'true' : 'false';  ?>,
+                arrows: false,
+                slidesToScroll: <?= $bannerHelper->getSlidesToScrollByDefault($storeId) ?
+                    $bannerHelper->getSlidesToScrollByDefault($storeId) : 1; ?>,
+                <?php } ?>
+                responsive: [
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                            infinite: true,
+                            dots: true
+                        }
+                    }
+                ]
+            });
+            $('.mdslider-container-nav').slick({
+                infinite: false,
+                slidesToShow:2,
+                slidesToScroll: 1,
+                asNavFor: '#page-gravure .mdslider-container',
+                focusOnSelect: true,
+                arrows: false
+            });
+            $(".mdslider-container").on('afterChange', function (event, slick, currentSlide) {
+                animationClass = $('.slick-active').find('.banner-caption').attr('data-animate');
+                $(currentSlide).find('.banner-caption').addClass('animated ' + animationClass);
+                $('.animated').removeClass('off');
+                $('.animated').addClass('activate ' + animationClass);
+            });
+
+            $(".mdslider-container").on('beforeChange', function (event, slick, currentSlide) {
+                animationClass = $('.slick-active').find('.banner-caption').attr('data-animate');
+                $(currentSlide).find('.banner-caption').addClass('animated ' + animationClass);
+                $('.animated').removeClass('activate ' + animationClass);
+                $('.animated').addClass('off');
+            });
+
+        });
+    });
+</script>

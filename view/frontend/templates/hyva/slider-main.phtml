@@ -1,0 +1,33 @@
+<?php declare(strict_types=1);
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
+/** @var \Hyva\Theme\ViewModel\Slider $sliderViewModel */
+
+$sliderViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Slider::class);
+$itemsTemplate   = 'Amici_BannerSlider::hyva/slider-item.phtml';
+$items           = []; // a collection or array of items to render
+?>
+
+<?php
+$bannerHelper = $this->helper(\Amici\BannerSlider\Helper\Data::class);
+$mediaUrl = $bannerHelper->getMediaUrl();
+$slider = $this->getSlider();
+$sliderId = $slider->getSliderId();
+$defaultItems = $slider->getDefaultItems();
+$storeId = $bannerHelper->getCurrentStoreId();
+$setSliderToStores = $slider->getStoreId();
+$banners = [];
+
+if (in_array($storeId, $setSliderToStores) || in_array('0', $setSliderToStores)) {
+    $banners = $bannerHelper->getBannersCollectionBySliderId($sliderId);
+}
+$isTimeToShowSlider = $bannerHelper->getSliderTimingBySliderId($slider->getSliderId());
+?>
+<?php
+if (sizeof($banners) > 0 && $slider->getStatus() && $isTimeToShowSlider) {
+    echo $sliderViewModel->getSliderForItems($itemsTemplate, $banners,"Amici_BannerSlider::hyva/slider-php.phtml")->toHtml();
+}
+
+?>

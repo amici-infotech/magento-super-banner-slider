@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<!--
+ * AmiciInfotech
+ * Copyright (C) 2023 AmiciInfotech <contact@amiciinfotech.com>
+ *
+ * NOTICE OF LICENSE
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    AmiciInfotech
+ * @package     Amici_BannerSlider
+ * @copyright   Copyright (c) 2023 AmiciInfotech (https://amiciinfotech.com/)
+ * @license     https://amiciinfotech.com/license-agreement.html
+ * @author      AmiciInfotech <contact@amiciinfotech.com>
+ */
+ */-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Amici_BannerSlider::bannerslider" title="Banner Slider" translate="title" 
+             module="Amici_BannerSlider" sortOrder="10" parent="Amici_Core::core" 
+             resource="Amici_BannerSlider::bannerslider"/>
+        
+        <add id="Amici_BannerSlider::amici_banner" title="Banners" translate="title" 
+             module="Amici_BannerSlider" sortOrder="10" parent="Amici_BannerSlider::bannerslider" 
+             action="bannerslider/banner" resource="Amici_BannerSlider::banner"/>
+        
+        <add id="Amici_BannerSlider::amici_slider" title="Sliders" translate="title"
+             module="Amici_BannerSlider" sortOrder="20" parent="Amici_BannerSlider::bannerslider" 
+             action="bannerslider/slider" resource="Amici_BannerSlider::slider"/>
+        
+        <add id="Amici_BannerSlider::settings" title="Settings" module="Amici_BannerSlider" sortOrder="30"
+             parent="Amici_BannerSlider::bannerslider" action="adminhtml/system_config/edit/section/bannerslider" 
+             resource="Amici_BannerSlider::settings"/>
+    </menu>
+</config>

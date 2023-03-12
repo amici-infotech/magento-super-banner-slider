@@ -1,0 +1,40 @@
+{
+    "name": "amici/super-banner-slider",
+    "description": "Super Banner slider allows user to add slider to magento pages",
+    "require": {
+        "php": "~5.*|~7.*|~8.*",
+        "magento/framework": "*",
+        "amici/magento-core": "*"
+    },
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "keywords": ["Magento", "Magento 2", "Magento2", "bannerslider", "banner slider", "banner", "slider", "hyva banner slider", "hyva", "hyva banner", "hyva slider", "image slider", "hyva image slider"],
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Amici Infotech",
+            "homepage": "https://amiciinfotech.com"
+        }
+    ],
+    "support": {
+        "email": "contact@amiciinfotech.com",
+        "issues": "https://github.com/amici-infotech/magento2-banner-slider/issues?state=open",
+        "source": "https://github.com/amici-infotech/magento2-banner-slider",
+        "docs": "https://github.com/amici-infotech/magento2-banner-slider/readme.md"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Amici\\BannerSlider\\": ""
+        }
+    },
+    "extra": {
+        "developer": "Amici Infotech",
+        "developerUrl": "https://amiciinfotech.com",
+        "documentationUrl": "https://github.com/amici-infotech/magento2-banner-slider/readme.md",
+        "changelogUrl": "https://github.com/amici-infotech/magento2-banner-slider/main/CHANGELOG.md",
+        "downloadUrl": "https://github.com/amici-infotech/magento2-banner-slider/archive/main.zip"
+    }
+}

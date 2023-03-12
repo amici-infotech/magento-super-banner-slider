@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+
+<!--
+* AmiciInfotech
+* Copyright (C) 2023 AmiciInfotech <contact@amiciinfotech.com>
+*
+* NOTICE OF LICENSE
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see http://opensource.org/licenses/gpl-3.0.html.
+*
+* Do not edit or add to this file if you wish to upgrade this extension to newer
+* version in the future.
+*
+* @category    AmiciInfotech
+* @package     Amici_BannerSlider
+* @copyright   Copyright (c) 2023 AmiciInfotech (https://amiciinfotech.com/)
+* @license     https://amiciinfotech.com/license-agreement.html
+* @author      AmiciInfotech <contact@amiciinfotech.com>
+*/
+*/-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="amici" translate="label" sortOrder="450">
+            <label>Amici Infotech</label>
+        </tab>
+        <section id="bannerslider" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Banner Slider</label>
+            <tab>amici</tab>
+            <resource>Amici_BannerSlider::config_bannerslider</resource>
+            <group id="general" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enable" translate="label comment" type="select" sortOrder="0"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <comment>Enable frontend</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="hyva_theme" translate="label comment" type="select" sortOrder="0"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Are you using Hyvä theme?</label>
+                    <comment>please select yes if you are using Hyvä theme</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="enable_at_home" translate="label comment" type="select" sortOrder="0"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable at Home Page</label>
+                    <comment>enable slider at home page</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="home_slider" translate="label comment" type="select" sortOrder="0"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Home Slider</label>
+                    <comment>Select Slider to be displayed on home page</comment>
+                    <source_model>Amici\BannerSlider\Model\Config\Source\Sliders</source_model>
+                    <depends>
+                        <field id="enable_at_home">1</field>
+                    </depends>
+                </field>
+                <group id="display_slider" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Code to Show Slider at Required Page/Block/Container</label>
+                    <frontend_model>Amici\BannerSlider\Block\Adminhtml\System\Config\DisplaySlider</frontend_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </group>
+            </group>
+           
+            <group id="slickslider_settings" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Slick Slider General Settings</label>
+                <field id="navbar" translate="label comment" type="select" sortOrder="0"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Nav Bar Show</label>
+                    <comment>default infinite value</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="slidetoscroll" translate="label comment" type="select" sortOrder="0"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Slide to Scroll Of Slider</label>
+                    <comment>default slide to scroll value</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="dots" translate="label comment" type="select" sortOrder="0"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dots value Of Slider</label>
+                    <comment>default dots value</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="autoplay" translate="label comment" type="select" sortOrder="0"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>AutoPlay value Of Slider</label>
+                    <comment>default autoplay value</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>          
+        </section>
+        <section id="imageresize" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Resize Image</label>
+            <tab>amici</tab>
+            <resource>Amici_BannerSlider::resize_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="banner_enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Banner Image Resized</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
