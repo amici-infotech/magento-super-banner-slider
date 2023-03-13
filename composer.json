@@ -2,7 +2,7 @@
     "name": "amici/super-banner-slider",
     "description": "Super Banner slider allows user to add slider to magento pages",
     "require": {
-        "php": "~5.*|~7.*|~8.*",
+        "php": ">=7.0.0",
         "magento/framework": "*",
         "amici/magento-core": "*"
     },
